@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+			#box
+	{
+		margin-top:none;
+		margin-bottom:5px;
+		padding-left:0px;
+
+	}
+#city
+	{
+		margin-top:9px;
+
+	}
+#mar
+	{
+		margin-bottom:none ;	
+		padding-bottom:none;
+	}
+h3
+	{
+		display:inline;
+	}
+#list h1, h2
+{
+	display:inline;
+	margin-top:20px;
+	padding-top:none;
+	padding-left:7px;
+	padding-right:7px;
+}
+#list p
+{
+	display:inline;
+}
+#box2 h2
+{
+	display:inline;
+}
+#cont
+{
+	width:700px;
+	height:200px;
+	margin-left:auto;
+	margin-right:auto;
+
+}
+#box2
+{
+	width:250px;
+	height:200px;
+	margin-left:auto;
+	margin-right:auto;
+	float:left;
+	box-sizing:border-box;
+
+}
+#box3
+{
+	width:250px;
+	height:200px;
+	margin-left:150px;
+	margin-right:auto;
+	float:left;
+	box-sizing:border-box;
+
+}
+#list
+{
+	margin-top:20px;
+}
+#fix
+{
+	Clear:both;
+}
+#cont2
+{
+	text-align:center;
+}
+
+
+
+
+	</style>
+</head>
+<body background="https://images.hellomarket.co.uk/api/v1/BlogImage/5829ee36918eb80664d5a09f" >
+	<center><h1 style="color:blue; margin-top:none"><u>Weather</u></h1> </center>
+	<center>
+		<div id="box">
+			<label for="city"><h3>Enter City Name :&nbsp;</h3></label>
+		<input type="text" id="city">
+		<button onclick="foo()">Search</button>
+	</center>
+	<div id="list">
+		<center><h1 id="place"><i></i></h1></center><br>
+		<center><h1 id="temp"></h1></center><br>
+		<center><h2 id="cond"><p></p></h2></center><br>
+
+	</div>
+	<div id="cont">
+		<img id="image" src="">
+		<div id="box2">
+			<h2 id="max"></h2><br><br>
+		
+			<h2 id="rise"></h2><br><br>
+		
+			<h2 id="feel"></h2><br><br>
+		
+			<h2 id="wind"></h2><br><br>
+		
+		</div>
+		<div id="box3">
+			<h2 id="min"></h2><br><br>
+			<h2 id="set"></h2><br><br>
+			<h2 id="press"></h2><br><br>
+			<h2 id="hum"></h2>		
+		</div>
+		<div id="fix"></div>
+	</div>
+	<div id="cont2">
+		<h1 id="tom"><u></u></h1>
+		<h2 id="tm"></h2><br>
+		<h1 id="dm"><u></u></h1>
+		<h2 id="day"></h2><br>
+		<h1 id="bb"><u></u></h1>
+		<h2 id="cc"></h2><br>
+		<h1 id="dd"><u></u></h1>
+		<h2 id="ee"></h2><br>
+
+
+
+	</div>
+</div>
+</body>
+<script>
+	foo=function()
+{
+	let name=document.getElementById("city").value;
+	console.log(name);
+	var date=new Date();
+	var hour= date.getHours();
+	console.log(hour)
+	console.log(date.getMinutes())
+	if(name.length==0)
+	{
+		alert("Enter City Name")
+	}
+	else
+	{
+		document.getElementById("image").src="https://media.tenor.com/images/ac5c7a884b87459bdb1eda2a5cc2e5c5/tenor.gif"
+	var cty=new XMLHttpRequest();
+	cty.open("GET","https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"+name+"?unitGroup=metric&key=EPCAEW2X5VCL9ZA7J6GMB9BTP")
+		//document.getElementsByTagName("body")[0].background="image.jpg"
+		cty.send()
+		cty.addEventListener('readystatechange',()=>{
+
+			if(cty.readyState==4)
+			{
+				if(cty.responseText=="Invalid location found. Please check your location parameter:"+name)
+				{
+					alert("Enter Valid City")
+					console.log("enter valid name")
+				}
+				else
+				{
+						document.getElementById("image").src=""
+				document.getElementById("place").innerText=""
+				document.getElementById("temp").innerText=""
+				
+				document.getElementById("cond").innerText=""
+				document.getElementById("max").innerText=""
+				document.getElementById("min").innerText=""
+				document.getElementById("rise").innerText=""
+				document.getElementById("set").innerText=""
+				document.getElementById("feel").innerText=""
+				document.getElementById("press").innerText=""
+				document.getElementById("wind").innerText=""
+				document.getElementById("hum").innerText=""
+				
+
+				data=JSON.parse(cty.responseText)
+				console.log(data.days)
+				document.getElementById("place").innerText=data.resolvedAddress
+				document.getElementById("place").style.background=" #660029";
+				document.getElementById("place").style.color="white"
+				document.getElementById("temp").innerText=data.days[0].hours[hour].temp+'\u00B0c';
+				document.getElementById("temp").style.fontSize="110px"
+				document.getElementById("cond").innerText=data.days[0].hours[hour].conditions;
+				document.getElementById("cond").style.fontSize="60px"
+				document.getElementById("max").innerText="Maxtemp :"+data.days[0].tempmax+'\u00B0c';
+				document.getElementById("min").innerText="Mintemp :"+data.days[0].tempmin+'\u00B0c';
+				document.getElementById("rise").innerText="Sunrise:"+data.days[0].sunrise;
+				document.getElementById("set").innerText="Sunset:"+data.days[0].sunset;
+				document.getElementById("feel").innerText="Feelslike:"+data.days[0].hours[hour].feelslike;
+				document.getElementById("press").innerText="Pressure:"+data.days[0].hours[hour].pressure;
+				document.getElementById("wind").innerText="Windspeed:"+data.days[0].hours[hour].windspeed;
+				document.getElementById("hum").innerText="Humidity:"+data.days[0].hours[hour].humidity;
+				document.getElementById("tom").innerText="ON"+" "+data.days[1].datetime
+				document.getElementById("tm").innerText="  Min/Max="+data.days[1].tempmax+'\u00B0c'+'/'+data.days[1].tempmin+'\u00B0c'+"   "+data.days[1].hours[hour].conditions;
+				document.getElementById("dm").innerText="ON"+" "+data.days[2].datetime
+				document.getElementById("day").innerText="  Min/Max="+data.days[2].tempmax+'\u00B0c'+'/'+data.days[2].tempmin+'\u00B0c'+"  "+data.days[2].hours[hour].conditions;
+				document.getElementById("bb").innerText="ON"+" "+data.days[3].datetime
+				document.getElementById("cc").innerText="  Min/Max="+data.days[3].tempmax+'\u00B0c'+'/'+data.days[3].tempmin+'\u00B0c'+"   "+data.days[3].hours[hour].conditions;
+				document.getElementById("dd").innerText="ON"+" "+data.days[4].datetime
+				document.getElementById("ee").innerText="  Min/Max="+data.days[4].tempmax+'\u00B0c'+'/'+data.days[4].tempmin+'\u00B0c'+"   "+data.days[4].hours[hour].conditions;
+
+				}
+				if(hour>=6&&hour<=19)
+				{
+					if(data.days[0].conditions=="Clear")
+					{
+						document.getElementsByTagName("body")[0].background="https://cdn.wallpapersafari.com/87/38/tQlH0v.jpg"
+					}
+					if(data.days[0].conditions=="Partially cloudy")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMuwsntvEAJ6ZrpwF8Z0SUr0tc0JNcoXac2g&usqp=CAU"
+					}
+					if(data.days[0].conditions=="Overcast")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErsOIwRIKiTmpfWpkeuVZRH7jvnjh473hgg&usqp=CAU"
+					}
+					if(data.days[0].conditioms=="Rain")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAgywFjh9YRi5UU_plwDE24M4BMWg_ZWMmPw&usqp=CAU"
+					}
+				}
+				else
+				{
+					document.getElementById("city").style.color="orange"
+					document.getElementById("temp").style.color="green"
+					document.getElementById("cond").style.color="green"
+					document.getElementById("cont").style.color="purple"
+					document.getElementById("cont2").style.color="lightblue"
+					if(data.days[0].conditions=="Clear")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsjTRN6icCZ5SvM4SGnhtOdcW0epY34xTSaQ&usqp=CAU"
+					}
+					if(data.days[0].conditions=="Partially cloudy")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAi3fILQK4TM9WJ4Xd4oSyokLcVseajMXa6w&usqp=CAU"
+					}
+					if(data.days[0].conditions=="Overcast")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErsOIwRIKiTmpfWpkeuVZRH7jvnjh473hgg&usqp=CAU"
+					}
+					if(data.days[0].conditioms=="Rain")
+					{
+						document.getElementsByTagName("body")[0].background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLK4Rj-EhVVEzbGoB8KbwzSIl9mObdSkJ4Zg&usqp=CAU"
+					}
+					
+				}
+				
+			}
+		})   
+		
+	
+
+document.getElementById("city").value=""
+}
+}
+	</script>
+</html>
